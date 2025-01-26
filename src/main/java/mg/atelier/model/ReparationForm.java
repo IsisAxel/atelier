@@ -11,7 +11,7 @@ public class ReparationForm {
     private LocalDateTime endDate;
     private double totalAmount;
 
-    // Getters and Setters
+ 
     public List<ComputerComponent> getComponents() {
         return components;
     }

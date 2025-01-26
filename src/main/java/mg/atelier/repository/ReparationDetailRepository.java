@@ -1,6 +1,7 @@
 package mg.atelier.repository;
 
 import mg.atelier.model.Reparation;
+import mg.atelier.model.ReparationType;
 import mg.atelier.model.ReparationDetail;
 
 import java.util.List;
@@ -12,4 +13,5 @@ import org.springframework.stereotype.Repository;
 public interface ReparationDetailRepository extends JpaRepository<ReparationDetail, Integer> {
 
     List<ReparationDetail> findByReparation(Reparation reparation);
+    List<ReparationDetail> findByReparationType(ReparationType reparationType);
 }

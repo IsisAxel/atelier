@@ -1,10 +1,12 @@
-<%@ page import="mg.atelier.model.ReparationTypePrice" %>
 <%@ page import="java.util.List" %>
+<%@ page import="mg.atelier.model.TechnicienCommission" %>
+<%@ page import="mg.atelier.model.Technicien" %>
+<%@ page import="mg.atelier.model.Genre" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des Types de Reparation</title>
+    <title>Techniciens</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <style>
         body {
@@ -32,7 +34,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/client/all">Clients</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/reparationType/all">Type de Reparation</a>
                 </li>
                 <li class="nav-item">
@@ -41,14 +43,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/return/all">Retour</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/techniciens/all">Technicien</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/techniciens/all">technicien</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container">
-        <h1>Voici la liste des types de reparation</h1>
+        <h1>Voici la liste des Techniciens</h1>
         <% 
             String success = (String) request.getAttribute("success");
             if (success != null && !success.isEmpty()) {
@@ -59,39 +61,49 @@
         <% 
             } 
         %>
+        <form action="/techniciens/filter/genre" method="POST" class="mb-4">
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="startDate">Date de debut:</label>
+                    <input type="date" class="form-control" id="startDate" name="start">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Date de fin:</label>
+                    <input type="date" class="form-control" id="endDate" name="end">
+                </div>
+                <label for="reparateur">Genre:</label>
+                <select class="form-control" id="reparateur" name="idGenre">
+                    <option value=0>tous</option>
+                    <% 
+                        List<Genre> allGenres = (List<Genre>) application.getAttribute("genre");
+                        for (Genre g : allGenres) {
+                    %>
+                        <option value="<%= g.getIdGenre() %>"><%= g.getGenre() %></option>
+                    <% 
+                        } 
+                    %>
+
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </form>
+    
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Composant a remplacer</th>
-                    <th>Duree</th>
-                    <th>Prix</th>
-                    <th>Action</th>
+                    <th>Genre</th>
+                    <th>Commission</th>
                 </tr>
             </thead>
-            <tbody id="reparationTypeTableBody">
+            <tbody id="technicienTableBody">
                 <% 
-                    List<ReparationTypePrice> allReparationTypes = (List<ReparationTypePrice>) application.getAttribute("reparationTypes");
-                    for (ReparationTypePrice reparationTypePrice : allReparationTypes) {
+                    TechnicienCommission technicien = (TechnicienCommission) request.getAttribute("etat");
+
                 %>
-                    <tr class="reparationType-row">
-                        <td><%= reparationTypePrice.getReparationType().getIdReparationType() %></td>
-                        <td><%= reparationTypePrice.getReparationType().getType() %></td>
-                        <td><%= reparationTypePrice.getReparationType().getComponent() != null ? reparationTypePrice.getReparationType().getComponent().getName() : "N/A" %></td>
-                        <td><%= reparationTypePrice.getReparationType().getCleanDuration() %></td>
-                        <td><%= reparationTypePrice.getPrice() %></td>
-                        <td>
-                            <form action="/reparationType/prepareUpdatePrice" method="get">
-                                <input type="hidden" name="id" value="<%= reparationTypePrice.getIdReparationTypePrice() %>">
-                                <input type="hidden" name="price" value="<%= reparationTypePrice.getPrice() %>">
-                                <button type="submit" class="btn btn-primary">Modifier le prix</button>
-                            </form>
-                        </td>
+                    <tr class="technicien-row">
+                        <td><%= technicien.getGenre().getGenre() %></td>
+                        <td><%= technicien.getCommission() %></td>
                     </tr>
-                <% 
-                    } 
-                %>
             </tbody>
         </table>
         <nav aria-label="Page navigation">
@@ -99,7 +111,6 @@
                 <!-- Pagination links will be generated by JavaScript -->
             </ul>
         </nav>
-        <a href="/reparationType/prepareInsert" class="btn bg-dark" style="color : white;">Ajouter un type de reparation</a>
     </div>
     <script src="/assets/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>
@@ -108,11 +119,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const rowsPerPage = 20;
-            const rows = document.querySelectorAll('.reparationType-row');
+            const rows = document.querySelectorAll('.technicien-row');
             const pagination = document.getElementById('pagination');
             const totalPages = Math.ceil(rows.length / rowsPerPage);
 
-            createPagination(rowsPerPage , rows , pagination,totalPages);
+            createPagination(rowsPerPage, rows, pagination, totalPages);
         });
     </script>
 </body>

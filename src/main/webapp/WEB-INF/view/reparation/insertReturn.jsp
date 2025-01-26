@@ -1,9 +1,18 @@
+<%@ page import="mg.atelier.model.ComponentType" %>
+<%@ page import="mg.atelier.model.ComponentStock" %>
+<%@ page import="mg.atelier.model.ComputerType" %>
+<%@ page import="mg.atelier.model.Brand" %>
 <%@ page import="mg.atelier.model.Clients" %>
+<%@ page import="mg.atelier.model.Status" %>
+<%@ page import="mg.atelier.model.ReparationType" %>
+<%@ page import="mg.atelier.model.ComputerUsage" %>
+<%@ page import="mg.atelier.model.ReparationTypePrice" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ajouter un Client</title>
+    <title>Ajouter un Retour</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <style>
         body {
@@ -28,13 +37,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/component/all">Composants</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/client/all">Clients</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/reparationType/all">Type de Reparation</a>
+                    <a class="nav-link" href="/reparationType/all">Types de Reparation</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="/reparation/all">Reparation</a>
                 </li>
                 <li class="nav-item">
@@ -47,17 +56,16 @@
         </div>
     </nav>
     <div class="container">
-        <h1>Ajouter un Client</h1>
+        <h1>Ajouter un Retour</h1>
+        <form action="/return/insert" method="post">
+            <input type="hidden" name="idReparation" value="<%= request.getAttribute("idReparation") %>">
 
-        <form action="/client/insert" method="post">
             <div class="form-group">
-                <label for="name">Nom</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <label for="returnDate">Date de retour</label>
+                <input type="datetime-local" class="form-control" id="returnDate" name="returnDate" required>
             </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
+        
+
             <% 
                 String error = (String) request.getAttribute("error");
                 if (error != null && !error.isEmpty()) {
@@ -70,7 +78,7 @@
             %>
             <button type="submit" class="btn btn-dark">Ajouter</button><br><br>
         </form>
-        <a href="/client/all"><button class="btn btn-dark">Retour</button></a>
+        <a href="/reparation/all"><button class="btn btn-dark">Retour</button></a>
     </div>
     <script src="/assets/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>

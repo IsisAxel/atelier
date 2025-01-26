@@ -22,6 +22,10 @@ public class Computer {
     @JoinColumn(name = "id_type_computer", nullable = false)
     private ComputerType computerType;
 
+    @ManyToOne
+    @JoinColumn(name = "id_usage", nullable = false)
+    private ComputerUsage computerUsage;
+
     @Column(name = "model", nullable = false, length = 50)
     private String model;
 
@@ -33,12 +37,13 @@ public class Computer {
     @JoinColumn(name = "id_brand", nullable = false)
     private Brand brand;
 
-    public Computer(int idComputer, ComputerType computerType, String model, Clients client, Brand brand) {
+    public Computer(int idComputer, ComputerType computerType, String model, Clients client, Brand brand,ComputerUsage computerUsage) {
         this.idComputer = idComputer;
         this.computerType = computerType;
         this.model = model;
         this.client = client;
         this.brand = brand;
+        this.computerUsage=computerUsage;
     }
 
     public Computer() {
@@ -58,6 +63,13 @@ public class Computer {
 
     public void setComputerType(ComputerType computerType) {
         this.computerType = computerType;
+    }
+    public ComputerUsage getComputerUsage() {
+        return computerUsage;
+    }
+
+    public void setComputerUsage(ComputerUsage computerUsage) {
+        this.computerUsage = computerUsage;
     }
 
     public String getModel() {

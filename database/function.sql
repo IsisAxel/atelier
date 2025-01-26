@@ -21,7 +21,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER reparation_insert_trigger
 AFTER INSERT ON reparation_details
 FOR EACH ROW
-EXECUTE FUNCTION update_stock_on_reparation_insert();
+EXECUTE PROCEDURE update_stock_on_reparation_insert();
 
 -- Trigger pour insertion dans achat
 CREATE OR REPLACE FUNCTION update_stock_on_achat_insert()
@@ -36,7 +36,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER achat_insert_trigger
 AFTER INSERT ON achat
 FOR EACH ROW
-EXECUTE FUNCTION update_stock_on_achat_insert();
+EXECUTE PROCEDURE update_stock_on_achat_insert();
 
 CREATE OR REPLACE FUNCTION get_latest_reparation_type_prices(specified_date TIMESTAMP)
 RETURNS TABLE (
@@ -58,3 +58,33 @@ BEGIN
     ON rtp.id_reparation_type = sub.id_reparation_type AND rtp.effective_date = sub.max_date;
 END;
 $$ LANGUAGE plpgsql;
+
+
+
+
+CREATE OR REPLACE FUNCTION technicien_commission_function(start_date_filter DATE, end_date_filter DATE , minimum_amount INT)
+RETURNS TABLE(id_technicien INT,id_genre INT, name VARCHAR, commission NUMERIC , id_role_technicien INT) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        t.id_technicien, 
+        t.id_genre,
+        t.name, 
+        COALESCE(SUM((r.total_amount * rt.commission) / 100), 0) AS commission,
+        t.id_role_technicien
+    FROM 
+        technicien t
+    LEFT JOIN 
+        reparation r ON t.id_technicien = r.id_technicien
+    LEFT JOIN
+        role_technicien rt ON t.id_role_technicien = rt.id_role_technicien
+    WHERE
+        r.total_amount >= minimum_amount AND DATE(r.start_date) BETWEEN start_date_filter AND end_date_filter
+    GROUP BY 
+        t.id_technicien, t.name, rt.commission
+    HAVING 
+        COALESCE(SUM(r.total_amount * rt.commission), 0) > 0;
+END;
+$$ LANGUAGE plpgsql;
+

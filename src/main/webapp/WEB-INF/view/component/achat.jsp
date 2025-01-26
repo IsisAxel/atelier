@@ -38,6 +38,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/reparation/all">Reparation</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/return/all">Retour</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/techniciens/all">Technicien</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -46,7 +52,7 @@
         <form action="/achat/insert" method="post">
             <input type="hidden" class="form-control" id="idComponent" name="idComponent" value="<%= request.getParameter("idComponent") %>" readonly>
             <div class="form-group">
-                <label for="quantity">Quantité</label>
+                <label for="quantity">Quantite</label>
                 <input type="number" class="form-control" id="quantity" name="quantity" required>
             </div>
             <div class="form-group">

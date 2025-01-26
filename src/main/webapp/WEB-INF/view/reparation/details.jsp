@@ -47,7 +47,13 @@
                     <a class="nav-link" href="/reparationType/all">Types de Reparation</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/reparation/all">Reparations</a>
+                    <a class="nav-link" href="/reparation/all">Reparation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/return/all">Retour</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/techniciens/all">Technicien</a>
                 </li>
             </ul>
         </div>
@@ -69,6 +75,10 @@
                     <tr>
                         <th>Ordinateur</th>
                         <td><%= rep.getComputer().getBrand().getName() %> <%= rep.getComputer().getModel() %></td>
+                    </tr>
+                    <tr>
+                        <th>Usage de l'ordinateur</th>
+                        <td><%= rep.getComputer().getComputerUsage().getUsageName() %></td>
                     </tr>
                     <tr>
                         <th>Date de debut</th>
@@ -114,7 +124,18 @@
                 </tbody>
             </table>
         </div>
-        <a href="/reparation/all" class="btn btn-dark">Retour</a>
+        <%
+            if(request.getParameter("typeReturn") != null && request.getParameter("typeReturn").equals("return")){
+                %>
+                    <a href="/return/all" class="btn btn-dark">Retour</a>
+                <%
+            } else {
+                %>
+                    <a href="/reparation/all" class="btn btn-dark">Retour</a>
+                <%
+            }
+        %>
+        
     </div>
     <script src="/assets/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>

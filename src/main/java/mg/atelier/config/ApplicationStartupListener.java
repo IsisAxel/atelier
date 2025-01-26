@@ -13,15 +13,20 @@ import mg.atelier.model.ComputerType;
 import mg.atelier.model.Reparation;
 import mg.atelier.model.ReparationTypePrice;
 import mg.atelier.model.Status;
+import mg.atelier.model.Genre;
+import mg.atelier.model.Technicien;
+import mg.atelier.model.ComputerUsage;
 import mg.atelier.service.BrandService;
 import mg.atelier.service.ClientsService;
 import mg.atelier.service.ComponentService;
+import mg.atelier.service.ComputerUsageService;
 import mg.atelier.service.ComponentTypeService;
 import mg.atelier.service.ComputerTypeService;
 import mg.atelier.service.ReparationService;
 import mg.atelier.service.ReparationTypePriceService;
 import mg.atelier.service.StatusService;
-
+import mg.atelier.service.TechnicienService;
+import mg.atelier.service.GenreService;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,10 +51,18 @@ public class ApplicationStartupListener implements ApplicationListener<ContextRe
     private final StatusService statusService;
     @Autowired
     private final ReparationService reparationService;
-
+    @Autowired
+    private final ComputerUsageService computerUsageService;
+    @Autowired
+    private final TechnicienService technicienService;
+    @Autowired
+    private final GenreService genreService;
+    
     public ApplicationStartupListener(ComponentService componentService, ComponentTypeService componentTypeService,
-                                      ComputerTypeService computerTypeService, ClientsService clientService, ServletContext servletContext,
-                                      ReparationTypePriceService reparationTypePriceService, BrandService brandService, StatusService statusService, ReparationService reparationService) {
+                                       ComputerTypeService computerTypeService, ClientsService clientService, ServletContext servletContext,
+                                       ReparationTypePriceService reparationTypePriceService, BrandService brandService,
+                                       StatusService statusService, ReparationService reparationService,
+                                       ComputerUsageService computerUsageService,TechnicienService technicienService,GenreService genreService) {
         this.componentService = componentService;
         this.componentTypeService = componentTypeService;
         this.computerTypeService = computerTypeService;
@@ -59,7 +72,11 @@ public class ApplicationStartupListener implements ApplicationListener<ContextRe
         this.brandService = brandService;
         this.statusService = statusService;
         this.reparationService = reparationService;
+        this.computerUsageService = computerUsageService;
+        this.technicienService=technicienService;
+        this.genreService=genreService;
     }
+    
 
     @Override
     public void onApplicationEvent(@SuppressWarnings("null") ContextRefreshedEvent event) {
@@ -70,7 +87,10 @@ public class ApplicationStartupListener implements ApplicationListener<ContextRe
         List<ReparationTypePrice> reparationTypes = reparationTypePriceService.getReparationTypePriceByDate(LocalDateTime.now());
         List<Reparation> reparations = reparationService.getAllReparations();
         List<Brand> brands = brandService.getAllBrands();
+        List<Technicien> techniciens = technicienService.getAllTechniciens();
         List<Status> statuses = statusService.getAllStatuses();
+        List<Genre> genre = genreService.getAllGenres();
+        List<ComputerUsage> computerUsages = computerUsageService.getAllComputerUsages();
         servletContext.setAttribute("components", components);
         servletContext.setAttribute("componentTypes", componentTypes);
         servletContext.setAttribute("computerTypes", computerTypes);
@@ -79,5 +99,9 @@ public class ApplicationStartupListener implements ApplicationListener<ContextRe
         servletContext.setAttribute("brands", brands);
         servletContext.setAttribute("statuses", statuses);
         servletContext.setAttribute("reparations", reparations);
+        servletContext.setAttribute("computerUsages", computerUsages);
+        servletContext.setAttribute("techniciens", techniciens);
+        servletContext.setAttribute("genre", genre);
+
     }
 }

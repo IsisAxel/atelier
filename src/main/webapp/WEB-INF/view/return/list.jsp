@@ -3,11 +3,12 @@
 <%@ page import="mg.atelier.model.ReparationType" %>
 <%@ page import="mg.atelier.model.ComputerUsage" %>
 <%@ page import="mg.atelier.model.ReparationTypePrice" %>
+<%@ page import="mg.atelier.model.Return" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des Reparations</title>
+    <title>Liste des Retours</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <style>
         body {
@@ -38,10 +39,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/reparationType/all">Types de Reparation</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/reparation/all">Reparation</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="/return/all">Retour</a>
                 </li>
                 <li class="nav-item">
@@ -51,7 +52,7 @@
         </div>
     </nav>
     <div class="container">
-        <h1>Voici la liste des reparations</h1>
+        <h1>Voici la liste des retour</h1>
         <% 
             String success = (String) request.getAttribute("success");
             if (success != null && !success.isEmpty()) {
@@ -73,75 +74,60 @@
             } 
         %>
         <br>
-        <form action="/reparation/recherche" method="POST">
-        <div class="form-group">
-            <label for="reparationType">Type de Reparation</label>
-            <select class="form-control" id="reparationType" name="idReparationTypePrice">
-                <option value=0>tous</option>
-                <% 
-                    List<ReparationTypePrice> reparationTypePrice = (List<ReparationTypePrice>) application.getAttribute("reparationTypes");
-                    for (ReparationTypePrice type : reparationTypePrice) {
-                %>
-                    <option value="<%= type.getReparationType().getIdReparationType() %>"><%= type.getReparationType().getType() %></option>
-                <% 
-                    } 
-                %>
+        <form action="/return/recherche" method="POST">
+            <div class="form-group">
+                <label for="reparationType">Type de Reparation</label>
+                <select class="form-control" id="reparationType" name="idReparationTypePrice">
+                    <option value=0>tous</option>
+                    <% 
+                        List<ReparationTypePrice> reparationTypePrice = (List<ReparationTypePrice>) application.getAttribute("reparationTypes");
+                        for (ReparationTypePrice type : reparationTypePrice) {
+                    %>
+                        <option value="<%= type.getReparationType().getIdReparationType() %>"><%= type.getReparationType().getType() %></option>
+                    <% 
+                        } 
+                    %>
 
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="ComputerUsage">Usage de l'ordinateur</label>
-            <select class="form-control" id="computerUsage" name="idComputerUsage" required>
-                <option value=0>tous</option>
-                <%  
-                    List<ComputerUsage> computerUsages = (List<ComputerUsage>) application.getAttribute("computerUsages");
-                    for (ComputerUsage usage : computerUsages) {
-                %>
-                    <option value="<%= usage.getIdComputerUsage() %>"><%= usage.getUsageName() %></option>
-                <% 
-                    } 
-                %>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Rechercher</button>
-    </form>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ComputerUsage">Usage de l'ordinateur</label>
+                <select class="form-control" id="computerUsage" name="idComputerUsage" required>
+                    <option value=0>tous</option>
+                    <%  
+                        List<ComputerUsage> computerUsages = (List<ComputerUsage>) application.getAttribute("computerUsages");
+                        for (ComputerUsage usage : computerUsages) {
+                    %>
+                        <option value="<%= usage.getIdComputerUsage() %>"><%= usage.getUsageName() %></option>
+                    <% 
+                        } 
+                    %>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Ordinateur</th>
-                    <th>Client</th>
-                    <th>Date de debut</th>
-                    <th>Date de fin</th>
+                    <th>Date de retour</th>
                     <th>Montant total</th>
                     <th>Action</th>
-                    <th>Retour</th>
                 </tr>
             </thead>
             <tbody id="reparationTableBody">
                 <% 
-                    List<Reparation> allReparations = (List<Reparation>) request.getAttribute("reparationFiltre");
-                        if(allReparations==null){
-                            allReparations=(List<Reparation>) application.getAttribute("reparations");
-                        }
-                    for (Reparation reparation : allReparations) {
+                    List<Return> allReturns = (List<Return>) request.getAttribute("returns");
+                    for (Return returnn : allReturns) {
                 %>
                     <tr class="reparation-row">
-                        <td><%= reparation.getIdReparation() %></td>
-                        <td><%= reparation.getComputer().getModel() %></td>
-                        <td><%= reparation.getComputer().getClient().getName() %></td>
-                        <td><%= reparation.getStartDate() %></td>
-                        <td><%= reparation.getEndDate() %></td>
-                        <td><%= reparation.getTotalAmount() %></td>
+                        <td><%= returnn.getReparation().getComputer().getModel() %></td>
+                        <td><%= returnn.getReturnDate() %></td>
+                        <td><%= returnn.getReparation().getTotalAmount() %></td>
                         <td>
-                            <form action="/reparation/details/<%= reparation.getIdReparation() %>" method="get">
-                                <input type="hidden" name="typeReturn" value="reparation">
+                            <form action="/reparation/details/<%= returnn.getReparation().getIdReparation() %>" method="get">
+                                <input type="hidden" name="typeReturn" value="return">
                                 <button type="submit" class="btn btn-primary">Voir les details</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="/return/prepareInsert/<%= reparation.getIdReparation() %>" method="get">
-                                <button type="submit" class="btn btn-primary">Ajouter retour</button>
                             </form>
                         </td>
                     </tr>
@@ -155,7 +141,6 @@
                 <!-- Pagination links will be generated by JavaScript -->
             </ul>
         </nav>
-        <a href="/reparation/prepareInsert" class="btn bg-dark" style="color : white;">Ajouter une reparation</a>
     </div>
     <script src="/assets/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>
