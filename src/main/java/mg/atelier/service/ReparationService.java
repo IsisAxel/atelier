@@ -5,8 +5,9 @@ import mg.atelier.repository.ReparationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jakarta.persistence.EntityNotFoundException;
+import mg.atelier.exception.EntityNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,5 +26,8 @@ public class ReparationService {
 
     public Reparation getReparationById(int id) throws EntityNotFoundException{
         return reparationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Reparation"));
+    }
+    public List<Reparation> getReparationsByDate(LocalDate date) {
+        return reparationRepository.findByStartDate(date);
     }
 }

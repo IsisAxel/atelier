@@ -3,6 +3,7 @@ package mg.atelier.service;
 import mg.atelier.exception.NotNullException;
 import mg.atelier.exception.UniqueException;
 import mg.atelier.model.ReparationType;
+import mg.atelier.model.Component;
 import mg.atelier.repository.ReparationTypeRepository;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -34,7 +35,9 @@ public class ReparationTypeService {
     public ReparationType getReparationTypeById(int id) {
         return reparationTypeRepository.findById(id).orElse(null);
     }
-
+    public ReparationType getReparationTypeByComponent(Component component) {
+        return reparationTypeRepository.findByComponent(component);
+    }
     public ReparationType createReparationType(ReparationType reparationType) throws UniqueException , NotNullException {
         try {
             checkNotNull(reparationType);

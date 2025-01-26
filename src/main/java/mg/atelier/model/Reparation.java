@@ -16,6 +16,28 @@ public class Reparation {
     @JoinColumn(name = "id_computer", nullable = false)
     private Computer computer;
 
+    @ManyToOne
+    @JoinColumn(name = "id_technicien", nullable = false)
+    private Technicien technicien;
+
+    public Reparation(int idReparation, Computer computer, Technicien technicien, LocalDateTime startDate,
+            LocalDateTime endDate, double totalAmount) {
+        this.idReparation = idReparation;
+        this.computer = computer;
+        this.technicien = technicien;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.totalAmount = totalAmount;
+    }
+
+    public Technicien getTechnicien() {
+        return technicien;
+    }
+
+    public void setTechnicien(Technicien technicien) {
+        this.technicien = technicien;
+    }
+
     @Column(name = "start_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime startDate;
 
@@ -24,6 +46,10 @@ public class Reparation {
 
     @Column(name = "total_amount", nullable = false)
     private double totalAmount;
+
+    public Reparation(int idReparation) {
+        this.idReparation = idReparation;
+    }
 
     public Reparation() {
     }

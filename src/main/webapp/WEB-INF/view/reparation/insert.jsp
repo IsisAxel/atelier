@@ -3,8 +3,10 @@
 <%@ page import="mg.atelier.model.ComputerType" %>
 <%@ page import="mg.atelier.model.Brand" %>
 <%@ page import="mg.atelier.model.Clients" %>
+<%@ page import="mg.atelier.model.Technicien" %>
 <%@ page import="mg.atelier.model.Status" %>
 <%@ page import="mg.atelier.model.ReparationType" %>
+<%@ page import="mg.atelier.model.ComputerUsage" %>
 <%@ page import="mg.atelier.model.ReparationTypePrice" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
@@ -43,7 +45,13 @@
                     <a class="nav-link" href="/reparationType/all">Types de Reparation</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/reparation/all">Reparations</a>
+                    <a class="nav-link" href="/reparation/all">Reparation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/return/all">Retour</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/techniciens/all">Technicien</a>
                 </li>
             </ul>
         </div>
@@ -84,6 +92,19 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="client">Technicien</label>
+                <select class="form-control" id="technicien" name="technicien">
+                    <% 
+                        List<Technicien> technicien = (List<Technicien>) application.getAttribute("techniciens");
+                        for (Technicien tec : technicien) {
+                    %>
+                        <option value="<%= tec.getIdTechnicien() %>"><%= tec.getName() %></option>
+                    <% 
+                        } 
+                    %>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="brand">Marque</label>
                 <select class="form-control" id="brand" name="brand.idBrand">
                     <% 
@@ -96,7 +117,19 @@
                     %>
                 </select>
             </div>
-
+            <div class="form-group">
+                <label for="computerUsage">Usage d'Ordinateur</label>
+                <select class="form-control" id="computerUsage" name="computerUsage.idComputerUsage" required>
+                    <% 
+                        List<ComputerUsage> computerUsages = (List<ComputerUsage>) application.getAttribute("computerUsages");
+                        for (ComputerUsage usage : computerUsages) {
+                    %>
+                        <option value="<%= usage.getIdComputerUsage() %>"><%= usage.getUsageName() %></option>
+                    <% 
+                        } 
+                    %>
+                </select>
+            </div>
             <h3>Composants de l'ordinateur</h3>
             <div id="componentsContainer">
                 <div class="form-group">
@@ -147,14 +180,7 @@
                 <label for="startDate">Date de debut</label>
                 <input type="datetime-local" class="form-control" id="startDate" name="startDate" required>
             </div>
-            <div class="form-group">
-                <label for="endDate">Date de fin</label>
-                <input type="datetime-local" class="form-control" id="endDate" name="endDate">
-            </div>
-            <div class="form-group">
-                <label for="totalAmount">Montant total</label>
-                <input type="number" step="0.01" class="form-control" id="totalAmount" name="totalAmount" required>
-            </div>
+        
 
             <% 
                 String error = (String) request.getAttribute("error");

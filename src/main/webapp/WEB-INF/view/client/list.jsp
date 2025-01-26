@@ -38,6 +38,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/reparation/all">Reparation</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/return/all">Retour</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/techniciens/all">Technicien</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -53,6 +59,13 @@
         <% 
             } 
         %>
+        <form action="/client/recherche" method="POST">
+            <div class="form-group">
+                <label for="reparationType">Date</label>
+                <input  class="form-control" type="date" name="date" id="date" value="2025-01-16">
+            </div>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -63,7 +76,10 @@
             </thead>
             <tbody id="clientTableBody">
                 <% 
-                    List<Clients> clients = (List<Clients>) application.getAttribute("clients");
+                    List<Clients> clients = (List<Clients>) request.getAttribute("clients");
+                        if(clients==null){
+                            clients = (List<Clients>) application.getAttribute("clients");
+                        }
                     for (Clients client : clients) {
                 %>
                     <tr class="client-row">

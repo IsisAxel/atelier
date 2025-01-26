@@ -38,6 +38,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/reparation/all">Reparation</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/return/all">Retour</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/techniciens/all">Technicien</a>
+                </li>
             </ul>
         </div>
     </nav>

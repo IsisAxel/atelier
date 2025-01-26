@@ -12,3 +12,4 @@ LEFT JOIN
     stock_history sh ON c.id_component = sh.id_component
 GROUP BY 
     c.id_component, c.name, c.serial_number, c.id_type, c.id_type_computer;
+    

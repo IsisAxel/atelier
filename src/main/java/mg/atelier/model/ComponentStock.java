@@ -33,7 +33,7 @@ public class ComponentStock {
     @Column(name = "stock")
     private int stock;
 
-    // Getters et setters
+
     public int getIdComponent() {
         return idComponent;
     }
